@@ -12,7 +12,7 @@ class kadio : public KXmlGuiWindow
     Q_OBJECT
 
 public:
-    explicit kadio(QWidget *parent = nullptr);
+    explicit kadio(const QVector<QString>& words, QWidget *parent = nullptr);
     ~kadio() override;
 
 };

@@ -9,7 +9,7 @@
 
 
 
-kadio::kadio(QWidget *parent) :
+kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     KXmlGuiWindow(parent)
 {
     QWidget* window = new QWidget(this);
@@ -18,9 +18,9 @@ kadio::kadio(QWidget *parent) :
     QWidget* left_pane = new QWidget(this);
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
-    left_pane_layout->addWidget(new QLabel("one"));
-    left_pane_layout->addWidget(new QLabel("two"));
-    left_pane_layout->addWidget(new QLabel("three"));
+    for (const QString& w : words) {
+        left_pane_layout->addWidget(new QLabel(w));
+    }
     main_layout->addWidget(left_pane);
 
 

@@ -14,7 +14,10 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    kadio* w = new kadio ;
+    QVector<QString> words{
+        QStringLiteral("one"), QStringLiteral("two"), QStringLiteral("three"), QStringLiteral("one again")
+    };
+    kadio* w = new kadio(words);
     w->show();
 
 /*
