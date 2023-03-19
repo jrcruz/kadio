@@ -2,9 +2,12 @@
 #define KADIO_H
 
 #include <QMainWindow>
+#include <QDialog>
 #include <QScopedPointer>
+#include <KXmlGuiWindow>
 
-class kadio : public QMainWindow
+
+class kadio : public KXmlGuiWindow
 {
     Q_OBJECT
 
