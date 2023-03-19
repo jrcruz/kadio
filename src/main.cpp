@@ -10,13 +10,25 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QFile>
+#include <QTextStream>
+
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    QVector<QString> words{
-        QStringLiteral("one"), QStringLiteral("two"), QStringLiteral("three"), QStringLiteral("one again")
-    };
+
+    QFile words_file("test-file");
+    if (! words_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return 0;
+    }
+
+    QTextStream words_file_stream(&words_file);
+    QVector<QString> words;
+    while (! words_file_stream.atEnd()) {
+        words.append(words_file_stream.readLine());
+    }
+
     kadio* w = new kadio(words);
     w->show();
 
