@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QMediaPlayer>
 
 
 
@@ -29,6 +30,10 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
 
     this->setCentralWidget(window);
 
+    QMediaPlayer* mediaplayer = new QMediaPlayer(this);
+    mediaplayer->setMedia(QUrl::fromLocalFile("/home/cruz/kadio/Cantique de Noël.mp3"));
+    mediaplayer->play();
+}
 
 
 }

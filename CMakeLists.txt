@@ -21,6 +21,7 @@ include(FeatureSummary)
 find_package(Qt5 CONFIG REQUIRED COMPONENTS
     Core    # QCommandLineParser, QStringLiteral
     Widgets # QApplication, QAction
+    Multimedia
 )
 
 find_package(KF5 REQUIRED COMPONENTS
@@ -47,6 +48,7 @@ add_executable(kadio ${kadio_SRC})
 # Use the Widgets module from Qt 5.
 target_link_libraries(kadio
     Qt5::Widgets
+    Qt5::Multimedia
     KF5::CoreAddons
     KF5::I18n
     KF5::XmlGui
