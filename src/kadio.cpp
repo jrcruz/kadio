@@ -1,7 +1,5 @@
 #include "kadio.h"
-//#include "ui_kadio.h"
-#include <KDatePicker>
-#include <QDockWidget>
+
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -24,17 +22,30 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
         left_pane_layout->addWidget(new QLabel(w));
     }
 
-    QLabel* right_pane = new QLabel("four");
-    main_layout->addWidget(right_pane);
+    play_button = new QPushButton(QIcon::fromTheme("media-pause"), "Pause");
+    main_layout->addWidget(play_button);
+    connect(play_button, &QPushButton::clicked, this, &kadio::playPauseMedia);
 
     this->setCentralWidget(window);
 
-    QMediaPlayer* mediaplayer = new QMediaPlayer(this);
+    mediaplayer = new QMediaPlayer(this);
     mediaplayer->setMedia(QUrl::fromLocalFile("/home/cruz/kadio/Cantique de Noël.mp3"));
     mediaplayer->play();
 }
 
 
+void kadio::playPauseMedia()
+{
+    if (mediaplayer->state() == QMediaPlayer::PlayingState) {
+        mediaplayer->pause();
+        play_button->setIcon(QIcon::fromTheme("media-play"));
+        play_button->setText("Play");
+    }
+    else {
+        mediaplayer->play();
+        play_button->setIcon(QIcon::fromTheme("media-pause"));
+        play_button->setText("Pause");
+    }
 }
 
 kadio::~kadio() = default;
