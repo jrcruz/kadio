@@ -1,4 +1,5 @@
 #include "kadio.h"
+#include "station_list_item.h"
 
 #include <QLabel>
 #include <QHBoxLayout>
@@ -18,8 +19,10 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     main_layout->addWidget(left_pane);
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
-    for (const QString& w : words) {
-        left_pane_layout->addWidget(new QLabel(w));
+    for (const QString& filename : words) {
+        auto line = new StationListItem(filename);
+        connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
+        left_pane_layout->addWidget(line);
     }
 
     play_button = new QPushButton(QIcon::fromTheme("media-pause"), "Pause");
@@ -29,7 +32,7 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     this->setCentralWidget(window);
 
     mediaplayer = new QMediaPlayer(this);
-    mediaplayer->setMedia(QUrl::fromLocalFile("/home/cruz/kadio/Cantique de Noël.mp3"));
+    mediaplayer->setMedia(QUrl::fromLocalFile(words.first()));
     mediaplayer->play();
 }
 
@@ -47,5 +50,15 @@ void kadio::playPauseMedia()
         play_button->setText("Pause");
     }
 }
+
+
+void kadio::changeTrack(const QString& new_track)
+{
+    mediaplayer->setMedia(QUrl::fromLocalFile(new_track));
+    mediaplayer->play();
+    play_button->setIcon(QIcon::fromTheme("media-pause"));
+    play_button->setText("Pause");
+}
+
 
 kadio::~kadio() = default;
