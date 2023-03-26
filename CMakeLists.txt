@@ -40,6 +40,7 @@ find_package(KF5 REQUIRED COMPONENTS
 set(kadio_SRC
   src/main.cpp
   src/kadio.cpp
+  src/station_list_item.cpp
 )
 
 # Tell CMake to create the helloworld executable
