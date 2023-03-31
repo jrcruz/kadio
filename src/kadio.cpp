@@ -8,6 +8,7 @@
 #include <QMediaPlayer>
 #include <QAction>
 #include <QCoreApplication>
+#include <QStatusBar>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -48,6 +49,10 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     mediaplayer = new QMediaPlayer(this);
     mediaplayer->setMedia(QUrl::fromLocalFile(words.first()));
 
+    QStatusBar* status_bar = new QStatusBar(window);
+    status_bar->addPermanentWidget(new QLabel(mediaplayer->media().request().url().url()));
+    this->setStatusBar(status_bar);
+
     this->setupGUI(Default, "kadioui.rc");
 }
 
@@ -73,6 +78,7 @@ void kadio::changeTrack(const QString& new_track)
     mediaplayer->play();
     play_button->setIcon(QIcon::fromTheme("media-pause"));
     play_button->setText("Pause");
+    this->statusBar()->findChild<QLabel*>()->setText(new_track);
 }
 
 

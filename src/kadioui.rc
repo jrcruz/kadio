@@ -13,4 +13,5 @@
     <ToolBar name="mainToolBar">
         <Action name="new-station" />
     </ToolBar>
+    <StatusBar />
 </gui>
