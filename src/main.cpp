@@ -17,6 +17,25 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    KLocalizedString::setApplicationDomain("kadio");
+
+    KAboutData about_data(
+        QStringLiteral("kadio"), // Component name
+        i18n("Kadio"), // Display name
+        QStringLiteral("1.0"), // Version
+        i18n("Qt-based web radio"), // Short description
+        KAboutLicense::GPL_V3, // Licence type
+        i18n("Copyright 2023, João Cruz"), // Copyright statement
+        QStringLiteral(""), // Other text
+        QStringLiteral("https://jcruz.eu/tags/kadio/") // Home page address
+    );
+    about_data.addAuthor(
+        i18n("João Cruz"), // Name
+        i18n("Main Developer"), // Task
+        QStringLiteral("jcruz@posteo.net"), // E-mail address
+        QStringLiteral("https://jcruz.eu/")); // Web address
+    KAboutData::setApplicationData(about_data);
+
 
     QFile words_file("test-file");
     if (! words_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
