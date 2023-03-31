@@ -10,4 +10,7 @@
             <Action name="new-station" />
         </Menu>
     </MenuBar>
+    <ToolBar name="mainToolBar">
+        <Action name="new-station" />
+    </ToolBar>
 </gui>
