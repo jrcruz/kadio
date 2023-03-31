@@ -14,6 +14,7 @@ class kadio : public KXmlGuiWindow
 private:
     QMediaPlayer* mediaplayer;
     QPushButton* play_button;
+    QWidget* left_pane;
 
 public slots:
     void playPauseMedia();

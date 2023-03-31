@@ -9,6 +9,7 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QStatusBar>
+#include <QFileDialog>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -22,7 +23,7 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     QWidget* window = new QWidget(this);
     QHBoxLayout* main_layout = new QHBoxLayout(window);
 
-    QWidget* left_pane = new QWidget;
+    left_pane = new QWidget;
     main_layout->addWidget(left_pane);
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
@@ -89,10 +90,21 @@ void kadio::changeTrack(const QString& new_track)
 }
 
 
-void kadio::addNewStation() { }
+void kadio::addNewStation()
+{
+    QString new_station = QFileDialog::getOpenFileName(this, i18n("Select audio file"), "", i18n("Audio files (*.mp3 *.ogg *.flac *.oga *.wav)"));
+    changeTrack(new_station);
+    auto list_item = new StationListItem(new_station);
+    left_pane->layout()->addWidget(list_item);
+    connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
+}
 
 
-void kadio::importStations() { }
+void kadio::importStations()
+{
+
+}
+
 
 
 void kadio::exportStations() { }
