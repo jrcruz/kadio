@@ -8,6 +8,8 @@
     <MenuBar>
         <Menu name="file">
             <Action name="new-station" />
+            <Action name="import-stations" />
+            <Action name="export-stations" />
         </Menu>
     </MenuBar>
     <ToolBar name="mainToolBar">

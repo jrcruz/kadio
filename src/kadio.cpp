@@ -36,11 +36,18 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     main_layout->addWidget(play_button);
     connect(play_button, &QPushButton::clicked, this, &kadio::playPauseMedia);
 
-
     QAction* new_station = new QAction(QIcon::fromTheme("document-new"), i18n("&New station"), this);
     this->actionCollection()->addAction("new-station", new_station);
     this->actionCollection()->setDefaultShortcut(new_station, Qt::CTRL + Qt::Key_N);
     connect(new_station, &QAction::triggered, this, &kadio::addNewStation);
+
+    QAction* import_stations = new QAction(QIcon::fromTheme("document-import"), i18n("&Import stations"), this);
+    this->actionCollection()->addAction("import-stations", import_stations);
+    connect(import_stations, &QAction::triggered, this, &kadio::importStations);
+
+    QAction* export_stations = new QAction(QIcon::fromTheme("document-export"), i18n("&Export stations"), this);
+    this->actionCollection()->addAction("export-stations", export_stations);
+    connect(export_stations, &QAction::triggered, this, &kadio::exportStations);
 
     KStandardAction::quit(qApp, &QCoreApplication::quit, actionCollection());
 
@@ -84,6 +91,11 @@ void kadio::changeTrack(const QString& new_track)
 
 void kadio::addNewStation() { }
 
+
+void kadio::importStations() { }
+
+
+void kadio::exportStations() { }
 
 
 kadio::~kadio() = default;
