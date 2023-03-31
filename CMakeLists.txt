@@ -34,7 +34,7 @@ find_package(KF5 REQUIRED COMPONENTS
     KIO             # KIO
 )
 
-
+set(CMAKE_INSTALL_RPATH "/home/cruz/kde/usr/lib64")
 
 
 set(kadio_SRC
@@ -45,6 +45,11 @@ set(kadio_SRC
 
 # Tell CMake to create the helloworld executable
 add_executable(kadio ${kadio_SRC})
+
+set_target_properties(kadio
+    PROPERTIES BUILD_WITH_INSTALL_RPATH ON
+)
+
 
 # Use the Widgets module from Qt 5.
 target_link_libraries(kadio
@@ -60,4 +65,5 @@ target_link_libraries(kadio
 )
 
 # Install the executable
-install(TARGETS kadio DESTINATION bin)
+install(TARGETS kadio DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES src/kadioui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kadio)
