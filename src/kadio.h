@@ -18,6 +18,7 @@ private:
 public slots:
     void playPauseMedia();
     void changeTrack(const QString& new_track);
+    void addNewStation();
 
 public:
     explicit kadio(const QVector<QString>& words, QWidget *parent = nullptr);

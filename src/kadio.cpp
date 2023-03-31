@@ -6,6 +6,12 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QMediaPlayer>
+#include <QAction>
+#include <QCoreApplication>
+
+#include <KActionCollection>
+#include <KLocalizedString>
+
 
 
 
@@ -29,11 +35,20 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     main_layout->addWidget(play_button);
     connect(play_button, &QPushButton::clicked, this, &kadio::playPauseMedia);
 
+
+    QAction* new_station = new QAction(QIcon::fromTheme("document-new"), i18n("&New station"), this);
+    this->actionCollection()->addAction("new-station", new_station);
+    this->actionCollection()->setDefaultShortcut(new_station, Qt::CTRL + Qt::Key_N);
+    connect(new_station, &QAction::triggered, this, &kadio::addNewStation);
+
+    KStandardAction::quit(qApp, &QCoreApplication::quit, actionCollection());
+
     this->setCentralWidget(window);
 
     mediaplayer = new QMediaPlayer(this);
     mediaplayer->setMedia(QUrl::fromLocalFile(words.first()));
-    mediaplayer->play();
+
+    this->setupGUI(Default, "kadioui.rc");
 }
 
 
@@ -59,6 +74,10 @@ void kadio::changeTrack(const QString& new_track)
     play_button->setIcon(QIcon::fromTheme("media-pause"));
     play_button->setText("Pause");
 }
+
+
+void kadio::addNewStation() { }
+
 
 
 kadio::~kadio() = default;
