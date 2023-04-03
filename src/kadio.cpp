@@ -142,8 +142,38 @@ void kadio::importStations()
 }
 
 
+void kadio::exportStations()
+{
+    QJsonObject top_level;
 
-void kadio::exportStations() { }
+    QString current_time = QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd'T'HH:mm:ss");
+    top_level.insert("export_date", current_time);
+    QJsonArray item_array;
+
+    auto labels = left_pane->findChildren<StationListItem*>();
+    for (auto label : labels) {
+        QJsonObject station_entry;
+        station_entry.insert("title", label->text());
+        station_entry.insert("url", label->text());
+        item_array.append(station_entry);
+    }
+    top_level.insert("entries", item_array);
+
+    QJsonDocument json_document(top_level);
+
+    QString default_export_file_name;
+    QTextStream(&default_export_file_name) << getenv("HOME") << "/export_kadio_" << current_time << ".json";
+    QString export_file_path = QFileDialog::getSaveFileName(this, i18n("Export file"), default_export_file_name, "JSON files (*.json)");
+    if (export_file_path.isEmpty()) {
+        return;
+    }
+
+    QSaveFile out_file(export_file_path);
+    out_file.open(QIODevice::WriteOnly);
+    out_file.write(json_document.toJson());
+    out_file.commit();
+    this->statusBar()->showMessage("Successfully exported station list", 3000);
+}
 
 
 kadio::~kadio() = default;
