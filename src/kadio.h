@@ -4,7 +4,7 @@
 
 class QPushButton;
 class QMediaPlayer;
-
+class StationListItem;
 
 
 class kadio : public KXmlGuiWindow
@@ -18,7 +18,7 @@ private:
 
 public slots:
     void playPauseMedia();
-    void changeTrack(const QString& new_track);
+    void changeTrack(StationListItem* clicked_label);
     void addNewStation();
     void importStations();
     void exportStations();

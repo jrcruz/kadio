@@ -28,12 +28,12 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
     for (const QString& filename : words) {
-        auto line = new StationListItem(filename);
+        auto line = new StationListItem(filename, QUrl::fromLocalFile(filename));
         connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
         left_pane_layout->addWidget(line);
     }
 
-    play_button = new QPushButton(QIcon::fromTheme("media-pause"), "Pause");
+    play_button = new QPushButton(QIcon::fromTheme("media-playback-start"), "Play");
     main_layout->addWidget(play_button);
     connect(play_button, &QPushButton::clicked, this, &kadio::playPauseMedia);
 
@@ -69,24 +69,24 @@ void kadio::playPauseMedia()
 {
     if (mediaplayer->state() == QMediaPlayer::PlayingState) {
         mediaplayer->pause();
-        play_button->setIcon(QIcon::fromTheme("media-play"));
+        play_button->setIcon(QIcon::fromTheme("media-playback-start"));
         play_button->setText("Play");
     }
     else {
         mediaplayer->play();
-        play_button->setIcon(QIcon::fromTheme("media-pause"));
+        play_button->setIcon(QIcon::fromTheme("media-playback-pause"));
         play_button->setText("Pause");
     }
 }
 
 
-void kadio::changeTrack(const QString& new_track)
+void kadio::changeTrack(StationListItem* clicked_label)
 {
-    mediaplayer->setMedia(QUrl::fromLocalFile(new_track));
+    mediaplayer->setMedia(QUrl(clicked_label->url()));
     mediaplayer->play();
-    play_button->setIcon(QIcon::fromTheme("media-pause"));
+    play_button->setIcon(QIcon::fromTheme("media-playback-pause"));
     play_button->setText("Pause");
-    this->statusBar()->findChild<QLabel*>()->setText(new_track);
+    this->statusBar()->findChild<QLabel*>()->setText(clicked_label->text());
 }
 
 
