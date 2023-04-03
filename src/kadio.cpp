@@ -15,6 +15,11 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QSaveFile>
+#include <QDateTime>
 
 
 
@@ -107,7 +112,33 @@ void kadio::addNewStation()
 
 void kadio::importStations()
 {
+    QString export_file_path = QFileDialog::getOpenFileName(this, i18n("Select Kadio export file"), getenv("HOME"), i18n("Json file (*.json)"));
+    if (export_file_path.isEmpty()) {
+        return;
+    }
 
+    QFile export_file(export_file_path);
+    export_file.open(QIODevice::ReadOnly);
+    auto json_document = QJsonDocument::fromJson(export_file.readAll());
+    export_file.close();
+
+    // Clear current list.
+    auto labels = left_pane->findChildren<StationListItem*>();
+    for (auto label_pointer : labels) {
+        delete label_pointer;
+    }
+
+    auto items = json_document["entries"].toArray();
+    for (auto entry_value : items) {
+        QJsonObject entry = entry_value.toObject();
+        QString title = entry["title"].toString();
+        QString url = entry["url"].toString();
+
+        auto list_item = new StationListItem(title, url);
+        left_pane->layout()->addWidget(list_item);
+        connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
+    }
+    this->statusBar()->showMessage(QStringLiteral("Successfully imported %1 stations").arg(items.size()), 3000);
 }
 
 
