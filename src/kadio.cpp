@@ -10,6 +10,7 @@
 #include <QCoreApplication>
 #include <QStatusBar>
 #include <QFileDialog>
+#include <QInputDialog>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -92,11 +93,15 @@ void kadio::changeTrack(StationListItem* clicked_label)
 
 void kadio::addNewStation()
 {
-    QString new_station = QFileDialog::getOpenFileName(this, i18n("Select audio file"), "", i18n("Audio files (*.mp3 *.ogg *.flac *.oga *.wav)"));
-    changeTrack(new_station);
-    auto list_item = new StationListItem(new_station);
-    left_pane->layout()->addWidget(list_item);
-    connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
+    bool ok = false;
+    QString url_string = QInputDialog::getText(this, "Add station", "Web radio URL:", QLineEdit::Normal, "https://", &ok);
+    QUrl url(url_string);
+    if (ok && url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
+        auto list_item = new StationListItem(url_string, url);
+        left_pane->layout()->addWidget(list_item);
+        connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
+        changeTrack(list_item);
+    }
 }
 
 
