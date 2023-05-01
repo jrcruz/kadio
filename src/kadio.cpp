@@ -75,6 +75,10 @@ kadio::kadio(QWidget *parent) :
 
 void kadio::playPauseMedia()
 {
+    if (mediaplayer->media().isNull()) {
+        return;
+    }
+
     if (mediaplayer->state() == QMediaPlayer::PlayingState) {
         mediaplayer->pause();
         play_button->setIcon(QIcon::fromTheme("media-playback-start"));
@@ -90,7 +94,7 @@ void kadio::playPauseMedia()
 
 void kadio::changeTrack(StationListItem* clicked_label)
 {
-    mediaplayer->setMedia(QUrl(clicked_label->url()));
+    mediaplayer->setMedia(clicked_label->url());
     mediaplayer->play();
     play_button->setIcon(QIcon::fromTheme("media-playback-pause"));
     play_button->setText("Pause");
