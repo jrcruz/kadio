@@ -25,7 +25,7 @@
 #include <QSqlQuery>
 
 
-kadio::kadio(const QVector<QString>& words, QWidget *parent) :
+kadio::kadio(QWidget *parent) :
     KXmlGuiWindow(parent)
 {
     QWidget* window = new QWidget(this);
@@ -64,7 +64,6 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     this->setCentralWidget(window);
 
     mediaplayer = new QMediaPlayer(this);
-    mediaplayer->setMedia(QUrl::fromLocalFile(words.first()));
 
     QStatusBar* status_bar = new QStatusBar(window);
     status_bar->addPermanentWidget(new QLabel(mediaplayer->media().request().url().url()));

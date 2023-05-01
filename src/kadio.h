@@ -24,6 +24,6 @@ public slots:
     void exportStations();
 
 public:
-    explicit kadio(const QVector<QString>& words, QWidget *parent = nullptr);
+    explicit kadio(QWidget *parent = nullptr);
     ~kadio() override;
 };
