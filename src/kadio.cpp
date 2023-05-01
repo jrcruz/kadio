@@ -66,7 +66,7 @@ kadio::kadio(QWidget *parent) :
     mediaplayer = new QMediaPlayer(this);
 
     QStatusBar* status_bar = new QStatusBar(window);
-    status_bar->addPermanentWidget(new QLabel(mediaplayer->media().request().url().url()));
+    status_bar->addPermanentWidget(new QLabel);
     this->setStatusBar(status_bar);
 
     this->setupGUI(Default, "kadioui.rc");
