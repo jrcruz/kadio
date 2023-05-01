@@ -1,5 +1,6 @@
 #include "kadio.h"
 #include "station_list_item.h"
+#include "database.h"
 
 #include <QLabel>
 #include <QHBoxLayout>
@@ -21,6 +22,7 @@
 #include <QSaveFile>
 #include <QDateTime>
 
+#include <QSqlQuery>
 
 
 kadio::kadio(const QVector<QString>& words, QWidget *parent) :
@@ -33,8 +35,9 @@ kadio::kadio(const QVector<QString>& words, QWidget *parent) :
     main_layout->addWidget(left_pane);
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
-    for (const QString& filename : words) {
-        auto line = new StationListItem(filename, QUrl::fromLocalFile(filename));
+    QSqlQuery q = KadioDatabase::instance().selectStationTitleUrl();
+    while (q.next()) {
+        auto line = new StationListItem(q.value(0).toString(), q.value(1).toUrl());
         connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
         left_pane_layout->addWidget(line);
     }
@@ -105,6 +108,7 @@ void kadio::addNewStation()
         auto list_item = new StationListItem(url_string, url);
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
+        KadioDatabase::instance().addStation(url_string, url_string);
         changeTrack(list_item);
     }
 }
@@ -127,6 +131,7 @@ void kadio::importStations()
     for (auto label_pointer : labels) {
         delete label_pointer;
     }
+    KadioDatabase::instance().clearStations();
 
     auto items = json_document["entries"].toArray();
     for (auto entry_value : items) {
@@ -137,6 +142,7 @@ void kadio::importStations()
         auto list_item = new StationListItem(title, url);
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
+        KadioDatabase::instance().addStation(title, url);
     }
     this->statusBar()->showMessage(QStringLiteral("Successfully imported %1 stations").arg(items.size()), 3000);
 }
