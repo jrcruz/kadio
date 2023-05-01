@@ -5,15 +5,6 @@
 #include "kadio.h"
 
 
-#include <KDatePicker>
-#include <QDockWidget>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QFile>
-#include <QTextStream>
-
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -24,7 +15,7 @@ int main(int argc, char *argv[])
         i18n("Kadio"), // Display name
         QStringLiteral("1.0"), // Version
         i18n("Qt-based web radio"), // Short description
-        KAboutLicense::GPL_V3, // Licence type
+        KAboutLicense::GPL_V3, // License type
         i18n("Copyright 2023, João Cruz"), // Copyright statement
         QStringLiteral(""), // Other text
         QStringLiteral("https://jcruz.eu/tags/kadio/") // Home page address
