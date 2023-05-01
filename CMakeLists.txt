@@ -22,6 +22,7 @@ find_package(Qt5 CONFIG REQUIRED COMPONENTS
     Core    # QCommandLineParser, QStringLiteral
     Widgets # QApplication, QAction
     Multimedia
+    Sql
 )
 
 find_package(KF5 REQUIRED COMPONENTS
@@ -41,6 +42,7 @@ set(kadio_SRC
   src/main.cpp
   src/kadio.cpp
   src/station_list_item.cpp
+  src/database.cpp
 )
 
 # Tell CMake to create the helloworld executable
@@ -55,6 +57,7 @@ set_target_properties(kadio
 target_link_libraries(kadio
     Qt5::Widgets
     Qt5::Multimedia
+    Qt5::Sql
     KF5::CoreAddons
     KF5::I18n
     KF5::XmlGui
