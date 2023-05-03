@@ -37,7 +37,7 @@ kadio::kadio(QWidget *parent) :
 
     QSqlQuery q = KadioDatabase::instance().selectStationTitleUrl();
     while (q.next()) {
-        auto line = new StationListItem(q.value(0).toString(), q.value(1).toUrl());
+        auto line = new StationListItem(q.value("title").toString(), q.value("url").toUrl());
         connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
         left_pane_layout->addWidget(line);
     }
