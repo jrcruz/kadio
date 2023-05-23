@@ -3,7 +3,7 @@
 
 class QString;
 class QSqlQuery;
-
+class QUrl;
 
 
 class KadioDatabase
@@ -16,7 +16,7 @@ public:
         return instance;
     }
 
-    bool addStation(const QString& title, const QString& url);
+    bool addStation(const QString& title, const QUrl& url);
     QSqlQuery selectStationTitleUrl();
     bool clearStations();
 

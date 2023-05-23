@@ -1,4 +1,6 @@
 #include "database.h"
+
+#include <QUrl>
 #include <QStandardPaths>
 #include <QTextStream>
 #include <QSqlQuery>
@@ -55,7 +57,7 @@ bool KadioDatabase::createStations()
 }
 
 
-bool KadioDatabase::addStation(const QString& title, const QString& url)
+bool KadioDatabase::addStation(const QString& title, const QUrl& url)
 {
     QSqlQuery query;
     query.prepare(QStringLiteral("INSERT INTO Stations(title, url) VALUES (:title, :url)"));
