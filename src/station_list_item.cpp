@@ -3,15 +3,30 @@
 #include <QMouseEvent>
 
 
-StationListItem::StationListItem(const QString& label_text, const QUrl& url)
-    : QLabel(label_text)
-    , m_url(url)
+StationListItem::StationListItem(QString label_text, QUrl url, QStringList tags, QPixmap image)
+    : QLabel{label_text}
+    , _url{url}
+    , _tags{tags}
+    , _image{image}
 {
     ;
 }
 
 
-StationListItem::~StationListItem() = default;
+QString StationListItem::title() const
+{ return text(); }
+
+
+QUrl StationListItem::url() const
+{ return _url; }
+
+
+QStringList StationListItem::tags() const
+{ return _tags; }
+
+
+QPixmap StationListItem::image() const
+{ return _image; }
 
 
 void StationListItem::mousePressEvent(QMouseEvent* event)
@@ -19,10 +34,4 @@ void StationListItem::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::LeftButton) {
         emit labelClicked(this);
     }
-}
-
-
-const QUrl& StationListItem::url() const
-{
-    return m_url;
 }

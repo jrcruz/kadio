@@ -1,6 +1,7 @@
 #include "kadio.h"
 #include "station_list_item.h"
 #include "database.h"
+#include "local_station_modal_popup.h"
 
 #include <QLabel>
 #include <QHBoxLayout>
@@ -24,6 +25,7 @@
 
 #include <QSqlQuery>
 
+#include <iostream>
 
 kadio::kadio(QWidget *parent) :
     KXmlGuiWindow(parent)
@@ -37,7 +39,7 @@ kadio::kadio(QWidget *parent) :
 
     QSqlQuery q = KadioDatabase::instance().selectStationTitleUrl();
     while (q.next()) {
-        auto line = new StationListItem(q.value("title").toString(), q.value("url").toUrl());
+        auto line = new StationListItem(q.value("title").toString(), q.value("url").toUrl(), {}, {});
         connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
         left_pane_layout->addWidget(line);
     }
@@ -104,14 +106,20 @@ void kadio::changeTrack(StationListItem* clicked_label)
 
 void kadio::addNewStation()
 {
-    bool ok = false;
-    QString url_string = QInputDialog::getText(this, "Add station", "Web radio URL:", QLineEdit::Normal, "https://", &ok);
-    QUrl url(url_string);
-    if (ok && url.isValid() && (url.scheme() == "http" || url.scheme() == "https")) {
-        auto list_item = new StationListItem(url_string, url);
+    LocalStationModalPopup d(this);
+    if (d.exec() == QDialog::Rejected) {
+        std::cout << "REJECTED" << std::endl;
+        return;
+    }
+    std::cout << "!" << d.title().toStdString() << ' '
+              << d.url().toString().toStdString() << ' '
+              << d.tags().join(" ").toStdString() << "!" << std::endl;
+    return;
+    if (d.url().isValid() && (d.url().scheme() == "http" || d.url().scheme() == "https")) {
+        auto list_item = new StationListItem(d.title(), d.url(), d.tags(), d.image());
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
-        KadioDatabase::instance().addStation(url_string, url_string);
+        KadioDatabase::instance().addStation(d.title(), d.url());
         changeTrack(list_item);
     }
 }
@@ -140,9 +148,9 @@ void kadio::importStations()
     for (auto entry_value : items) {
         QJsonObject entry = entry_value.toObject();
         QString title = entry["title"].toString();
-        QString url = entry["url"].toString();
+        QUrl url = entry["url"].toString();
 
-        auto list_item = new StationListItem(title, url);
+        auto list_item = new StationListItem(title, url, {}, {});
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
         KadioDatabase::instance().addStation(title, url);
