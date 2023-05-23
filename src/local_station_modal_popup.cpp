@@ -1,6 +1,18 @@
-#include <QLabel>
-
 #include "local_station_modal_popup.h"
+
+#include <QLabel>
+#include <QtCore/QVariant>
+#include <QtGui/QIcon>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
+
 #include <KLocalizedString>
 
 
@@ -9,64 +21,68 @@ LocalStationModalPopup::LocalStationModalPopup(QWidget* parent)
 {
 
     QLabel* l = new QLabel("hi", this);
-    setupUi();
-    this->show();
-}
 
 
-void LocalStationModalPopup::setupUi()
-{
     this->setWindowModality(Qt::WindowModal);
-    this->resize(600, 400);
+    this->resize(600, 470);
     QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     sizePolicy.setHorizontalStretch(0);
     sizePolicy.setVerticalStretch(0);
     sizePolicy.setHeightForWidth(this->sizePolicy().hasHeightForWidth());
     this->setSizePolicy(sizePolicy);
     this->setMinimumSize(QSize(600, 400));
-    this->setMaximumSize(QSize(600, 400));
-    this->setWindowTitle(i18n("Add local station"));
+    this->setWindowTitle(QString::fromUtf8("Add local station"));
     this->setModal(true);
-
     auto verticalLayoutWidget = new QWidget(this);
-    verticalLayoutWidget->setGeometry(QRect(30, 80, 241, 206));
+    verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
+    verticalLayoutWidget->setGeometry(QRect(30, 80, 241, 271));
     auto verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+    verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
     verticalLayout->setContentsMargins(0, 0, 0, 0);
     auto title_label = new QLabel(verticalLayoutWidget);
-    title_label->setText(i18n("Title*"));
+    title_label->setObjectName(QString::fromUtf8("title_label"));
+    title_label->setText(QString::fromUtf8("Title*"));
 
     verticalLayout->addWidget(title_label);
 
     auto title_input = new QLineEdit(verticalLayoutWidget);
-    title_input->setPlaceholderText(i18n("Cool station name"));
+    title_input->setObjectName(QString::fromUtf8("title_input"));
+    title_input->setPlaceholderText(QString::fromUtf8("Cool station name"));
 
     verticalLayout->addWidget(title_input);
 
     auto url_label = new QLabel(verticalLayoutWidget);
-    url_label->setText(i18n("URL*"));
+    url_label->setObjectName(QString::fromUtf8("url_label"));
+    url_label->setText(QString::fromUtf8("URL*"));
 
     verticalLayout->addWidget(url_label);
 
     auto url_input = new QLineEdit(verticalLayoutWidget);
-    url_input->setPlaceholderText(i18n("http://example.org/radio"));
+    url_input->setObjectName(QString::fromUtf8("url_input"));
+    url_input->setPlaceholderText(QString::fromUtf8("http://example.org/radio"));
 
     verticalLayout->addWidget(url_input);
 
     auto tags_label = new QLabel(verticalLayoutWidget);
-    tags_label->setText(i18n("Tags"));
+    tags_label->setObjectName(QString::fromUtf8("tags_label"));
+    tags_label->setText(QString::fromUtf8("Tags"));
 
     verticalLayout->addWidget(tags_label);
 
     auto tags_input = new QLineEdit(verticalLayoutWidget);
-    tags_input->setPlaceholderText(i18n("rock,classical"));
+    tags_input->setObjectName(QString::fromUtf8("tags_input"));
+    tags_input->setPlaceholderText(QString::fromUtf8("rock,classical"));
 
     verticalLayout->addWidget(tags_input);
 
     auto horizontalLayoutWidget = new QWidget(this);
-    horizontalLayoutWidget->setGeometry(QRect(50, 330, 499, 40));
+    horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
+    horizontalLayoutWidget->setGeometry(QRect(50, 390, 499, 40));
     auto horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
+    horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
     horizontalLayout->setContentsMargins(0, 0, 0, 0);
     auto button_cancel = new QPushButton(horizontalLayoutWidget);
+    button_cancel->setObjectName(QString::fromUtf8("button_cancel"));
     QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
     sizePolicy1.setHorizontalStretch(0);
     sizePolicy1.setVerticalStretch(0);
@@ -76,13 +92,13 @@ void LocalStationModalPopup::setupUi()
     QFont font;
     font.setKerning(true);
     button_cancel->setFont(font);
-    button_cancel->setText(i18n("Cancel"));
+    button_cancel->setText(QString::fromUtf8("Cancel"));
     QIcon icon;
-    QString iconThemeName = i18n("cancel");
+    QString iconThemeName = QString::fromUtf8("cancel");
     if (QIcon::hasThemeIcon(iconThemeName)) {
         icon = QIcon::fromTheme(iconThemeName);
     } else {
-        icon.addFile(i18n("."), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
     }
     button_cancel->setIcon(icon);
     button_cancel->setAutoDefault(false);
@@ -95,6 +111,7 @@ void LocalStationModalPopup::setupUi()
     horizontalLayout->addItem(spacer_buttons);
 
     auto button_add = new QPushButton(horizontalLayoutWidget);
+    button_add->setObjectName(QString::fromUtf8("button_add"));
     QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
     sizePolicy2.setHorizontalStretch(0);
     sizePolicy2.setVerticalStretch(0);
@@ -102,13 +119,13 @@ void LocalStationModalPopup::setupUi()
     button_add->setSizePolicy(sizePolicy2);
     button_add->setMaximumSize(QSize(100, 16777215));
     button_add->setLayoutDirection(Qt::LeftToRight);
-    button_add->setText(i18n("Add"));
+    button_add->setText(QString::fromUtf8("Add"));
     QIcon icon1;
-    iconThemeName = i18n("add");
+    iconThemeName = QString::fromUtf8("add");
     if (QIcon::hasThemeIcon(iconThemeName)) {
         icon1 = QIcon::fromTheme(iconThemeName);
     } else {
-        icon1.addFile(i18n("."), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
     }
     button_add->setIcon(icon1);
     button_add->setAutoDefault(false);
@@ -116,29 +133,73 @@ void LocalStationModalPopup::setupUi()
     horizontalLayout->addWidget(button_add);
 
     auto modal_title = new QLabel(this);
-    modal_title->setGeometry(QRect(30, 20, 161, 31));
+    modal_title->setObjectName(QString::fromUtf8("modal_title"));
+    modal_title->setGeometry(QRect(30, 20, 222, 36));
     QFont font1;
     font1.setPointSize(16);
     modal_title->setFont(font1);
-    modal_title->setText(i18n("Add station"));
-    auto picture_image_label = new QLabel(this);
-    picture_image_label->setGeometry(QRect(330, 100, 200, 200));
-    //picture_image_label->setPixmap(QPixmap(i18n("k.png")));
-    auto picture_label = new QLabel(this);
-    picture_label->setGeometry(QRect(390, 60, 79, 22));
-    picture_label->setText(i18n("Picture"));
+    modal_title->setText(QString::fromUtf8("Add local station"));
+    auto widget = new QWidget(this);
+    widget->setObjectName(QString::fromUtf8("widget"));
+    widget->setGeometry(QRect(320, 91, 220, 262));
+    auto verticalLayout_2 = new QVBoxLayout(widget);
+    verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+    verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+    auto frame = new QFrame(widget);
+    frame->setObjectName(QString::fromUtf8("frame"));
+    frame->setFrameShape(QFrame::StyledPanel);
+    frame->setFrameShadow(QFrame::Raised);
+    auto gridLayout = new QGridLayout(frame);
+    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+    auto picture_image_label = new QLabel(frame);
+    picture_image_label->setObjectName(QString::fromUtf8("picture_image_label"));
+    picture_image_label->setMaximumSize(QSize(200, 200));
+    picture_image_label->setPixmap(QPixmap(QString::fromUtf8(":/default-radio-icon")));
+    picture_image_label->setScaledContents(true);
+
+    gridLayout->addWidget(picture_image_label, 0, 0, 1, 1);
+
+
+    verticalLayout_2->addWidget(frame);
+
+    auto pushButton = new QPushButton(widget);
+    pushButton->setObjectName(QString::fromUtf8("pushButton"));
+    pushButton->setMaximumSize(QSize(115, 16777215));
+    pushButton->setText(QString::fromUtf8("Add icon"));
+    QIcon icon2;
+    iconThemeName = QString::fromUtf8("document-import");
+    if (QIcon::hasThemeIcon(iconThemeName)) {
+        icon2 = QIcon::fromTheme(iconThemeName);
+    } else {
+        icon2.addFile(QString::fromUtf8("."), QSize(), QIcon::Normal, QIcon::Off);
+    }
+    pushButton->setIcon(icon2);
+
+    verticalLayout_2->addWidget(pushButton, 0, Qt::AlignHCenter);
 
     title_label->setBuddy(title_input);
     url_label->setBuddy(url_input);
     tags_label->setBuddy(tags_input);
 
-//    connect(title_input, &QLineEdit::textChanged, &_title, &QLabel::setText);
-    connect(title_input, &QLineEdit::textChanged, this, [this](QString s) { _title = s; });
-    connect(url_input,   &QLineEdit::textChanged, this, [this](QString s) { _url.setUrl(s); });
-    connect(tags_input,  &QLineEdit::textChanged, this, [this](QString s) { _tags = s.split(','); });
 
-    connect(button_cancel, &QAbstractButton::clicked, this, &QDialog::reject);
-    connect(button_add, &QAbstractButton::clicked, this, &QDialog::accept);
+    QObject::connect(button_cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QObject::connect(button_add, SIGNAL(clicked()), this, SLOT(accept()));
 
-    button_cancel->setDefault(false);
+    this->show();
 }
+
+
+QString LocalStationModalPopup::title() const
+{ return _title; }
+
+
+QUrl LocalStationModalPopup::url() const
+{ return _url; }
+
+
+QStringList LocalStationModalPopup::tags() const
+{ return _tags; }
+
+
+QPixmap LocalStationModalPopup::image() const
+{ return _img; }

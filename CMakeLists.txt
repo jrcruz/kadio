@@ -42,6 +42,7 @@ set(kadio_SRC
   src/main.cpp
   src/kadio.cpp
   src/station_list_item.cpp
+  src/local_station_modal_popup.cpp
   src/database.cpp
 )
 
