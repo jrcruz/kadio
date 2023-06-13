@@ -12,16 +12,17 @@
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include <QFileDialog>
+#include <QTextStream>
 
 #include <KLocalizedString>
+
+#include <iostream>
 
 
 LocalStationModalPopup::LocalStationModalPopup(QWidget* parent)
     : QDialog(parent)
 {
-
-    QLabel* l = new QLabel("hi", this);
-
 
     this->setWindowModality(Qt::WindowModal);
     this->resize(600, 470);
@@ -182,8 +183,23 @@ LocalStationModalPopup::LocalStationModalPopup(QWidget* parent)
     tags_label->setBuddy(tags_input);
 
 
-    QObject::connect(button_cancel, SIGNAL(clicked()), this, SLOT(reject()));
-    QObject::connect(button_add, SIGNAL(clicked()), this, SLOT(accept()));
+    QObject::connect(button_cancel, &QAbstractButton::clicked, this, &QDialog::reject);
+    QObject::connect(button_add,    &QAbstractButton::clicked, this, &QDialog::accept);
+
+    connect(title_input, &QLineEdit::textChanged, this, [this](const QString& s) { _title = s; });
+    connect(url_input,   &QLineEdit::textChanged, this, [this](const QString& s) { _url = s; });
+    connect(tags_input,  &QLineEdit::textChanged, this, [this](const QString& s) { _tags = s.split(','); });
+    connect(pushButton,  &QAbstractButton::clicked, this, [this, picture_image_label] {
+        QPixmap image{QFileDialog::getOpenFileName(
+            this, i18n("Select an image for the radio icon"),
+            getenv("HOME"), "Images (*png *jpg *jpeg)"
+        )};
+
+        if (! image.isNull()) {
+            _img.swap(image);
+            picture_image_label->setPixmap(_img);
+        }
+    });
 
     this->show();
 }

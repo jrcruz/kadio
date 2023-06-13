@@ -8,6 +8,8 @@ set(CMAKE_AUTOMOC ON)
 # Instruct CMake to create code from Qt designer ui files
 set(CMAKE_AUTOUIC ON)
 
+set(CMAKE_AUTORCC ON)
+
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
@@ -47,7 +49,7 @@ set(kadio_SRC
 )
 
 # Tell CMake to create the helloworld executable
-add_executable(kadio ${kadio_SRC})
+add_executable(kadio ${kadio_SRC} resources.qrc)
 
 set_target_properties(kadio
     PROPERTIES BUILD_WITH_INSTALL_RPATH ON
