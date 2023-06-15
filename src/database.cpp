@@ -114,10 +114,10 @@ bool KadioDatabase::addStation(const QString& title, const QUrl& url, const QStr
 }
 
 
-QSqlQuery KadioDatabase::selectStationTitleUrl()
+QSqlQuery KadioDatabase::selectStationTitleUrlImage()
 {
     QSqlQuery query;
-    query.prepare(QStringLiteral("SELECT title, url FROM Stations"));
+    query.prepare(QStringLiteral("SELECT title, url, image_blob FROM Stations"));
     execute(query);
     return query;
 }

@@ -22,6 +22,7 @@
 #include <QJsonObject>
 #include <QSaveFile>
 #include <QDateTime>
+#include <QPixmap>
 
 #include <QSqlQuery>
 
@@ -37,9 +38,11 @@ kadio::kadio(QWidget *parent) :
     main_layout->addWidget(left_pane);
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
-    QSqlQuery q = KadioDatabase::instance().selectStationTitleUrl();
+    QSqlQuery q = KadioDatabase::instance().selectStationTitleUrlImage();
     while (q.next()) {
-        auto line = new StationListItem(q.value("title").toString(), q.value("url").toUrl(), {}, {});
+        QPixmap image;
+        image.loadFromData(q.value(2).toByteArray());
+        auto line = new StationListItem(q.value(0).toString(), q.value(1).toUrl(), {}, image);
         connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
         left_pane_layout->addWidget(line);
     }
@@ -100,27 +103,22 @@ void kadio::changeTrack(StationListItem* clicked_label)
     mediaplayer->play();
     play_button->setIcon(QIcon::fromTheme("media-playback-pause"));
     play_button->setText("Pause");
-    this->statusBar()->findChild<QLabel*>()->setText(clicked_label->text());
+    this->statusBar()->findChild<QLabel*>()->setText(clicked_label->title());
 }
 
 
 void kadio::addNewStation()
 {
-    LocalStationModalPopup d(this);
+    LocalStationModalPopup d{this};
     if (d.exec() == QDialog::Rejected) {
-        std::cout << "REJECTED" << std::endl;
         return;
     }
-    std::cout << "!" << d.title().toStdString() << ' '
-              << d.url().toString().toStdString() << ' '
-              << d.tags().join(" ").toStdString() << "!" << std::endl;
-    return;
+
     if (d.url().isValid() && (d.url().scheme() == "http" || d.url().scheme() == "https")) {
         auto list_item = new StationListItem(d.title(), d.url(), d.tags(), d.image());
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
-        KadioDatabase::instance().addStation(d.title(), d.url());
-        changeTrack(list_item);
+        KadioDatabase::instance().addStation(d.title(), d.url(), d.tags(), d.image());
     }
 }
 
@@ -153,7 +151,7 @@ void kadio::importStations()
         auto list_item = new StationListItem(title, url, {}, {});
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
-        KadioDatabase::instance().addStation(title, url);
+        KadioDatabase::instance().addStation(title, url, {}, {});
     }
     this->statusBar()->showMessage(QStringLiteral("Successfully imported %1 stations").arg(items.size()), 3000);
 }
@@ -170,8 +168,8 @@ void kadio::exportStations()
     auto labels = left_pane->findChildren<StationListItem*>();
     for (auto label : labels) {
         QJsonObject station_entry;
-        station_entry.insert("title", label->text());
-        station_entry.insert("url", label->text());
+        station_entry.insert("title", label->title());
+        station_entry.insert("url", label->title());
         item_array.append(station_entry);
     }
     top_level.insert("entries", item_array);

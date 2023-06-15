@@ -20,7 +20,6 @@ private:
 
 public:
     explicit LocalStationModalPopup(QWidget* parent);
-    void setupUi();
 
     QString title() const;
     QUrl url() const;

@@ -155,7 +155,8 @@ LocalStationModalPopup::LocalStationModalPopup(QWidget* parent)
     auto picture_image_label = new QLabel(frame);
     picture_image_label->setObjectName(QString::fromUtf8("picture_image_label"));
     picture_image_label->setMaximumSize(QSize(200, 200));
-    picture_image_label->setPixmap(QPixmap(QString::fromUtf8(":/default-radio-icon")));
+    _img = QPixmap{QString::fromUtf8(":/default-radio-icon")};
+    picture_image_label->setPixmap(_img);
     picture_image_label->setScaledContents(true);
 
     gridLayout->addWidget(picture_image_label, 0, 0, 1, 1);

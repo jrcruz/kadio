@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QLabel>
+#include <QFrame>
 #include <QString>
 #include <QStringList>
 #include <QUrl>
@@ -10,17 +11,18 @@
 class QMouseEvent;
 
 
-class StationListItem : public QLabel
+class StationListItem : public QFrame
 {
     Q_OBJECT
 
 private:
+    QString _title;
     QUrl _url;
     QStringList _tags;
     QPixmap _image;
 
 public:
-    explicit StationListItem(QString label_text, QUrl url, QStringList tags, QPixmap image);
+    explicit StationListItem(QString label_text, QUrl url, QStringList tags, const QPixmap& image);
     ~StationListItem() = default;
 
     QString title() const;
