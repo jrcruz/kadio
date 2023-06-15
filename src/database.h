@@ -2,8 +2,10 @@
 
 
 class QString;
+class QStringList;
 class QSqlQuery;
 class QUrl;
+class QPixmap;
 
 
 class KadioDatabase
@@ -16,12 +18,12 @@ public:
         return instance;
     }
 
-    bool addStation(const QString& title, const QUrl& url);
-    QSqlQuery selectStationTitleUrl();
+    bool addStation(const QString& title, const QUrl& url, const QStringList& tags, const QPixmap& image);
     bool clearStations();
 
 private:
-    bool createStations();
+    bool createStationsTable();
+    bool createStationCategoriesTable();
 
 private:
     KadioDatabase();
