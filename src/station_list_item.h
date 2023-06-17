@@ -22,7 +22,7 @@ private:
     QPixmap _image;
 
 public:
-    explicit StationListItem(QString label_text, QUrl url, QStringList tags, const QPixmap& image);
+    explicit StationListItem(const QString& label_text, const QUrl& url, const QStringList& tags, const QPixmap& image);
     ~StationListItem() = default;
 
     QString title() const;
