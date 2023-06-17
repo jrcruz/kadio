@@ -17,6 +17,7 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 
+#include <QBuffer>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -38,11 +39,19 @@ kadio::kadio(QWidget *parent) :
     main_layout->addWidget(left_pane);
     QVBoxLayout* left_pane_layout = new QVBoxLayout(left_pane);
 
-    QSqlQuery q = KadioDatabase::instance().selectStationTitleUrlImage();
+    QSqlQuery q{KadioDatabase::instance().selectStationIdTitleUrlImage()};
     while (q.next()) {
+        QStringList tags;
+        tags.reserve(5);
+        QSqlQuery tags_query{KadioDatabase::instance().selectStationCategories(q.value(0).toInt())};
+        while (tags_query.next()) {
+            tags.append(tags_query.value(0).toString());
+        }
+
         QPixmap image;
-        image.loadFromData(q.value(2).toByteArray());
-        auto line = new StationListItem(q.value(0).toString(), q.value(1).toUrl(), {}, image);
+        image.loadFromData(q.value(3).toByteArray());
+
+        auto line = new StationListItem(q.value(1).toString(), q.value(2).toUrl(), tags, image);
         connect(line, &StationListItem::labelClicked, this, &kadio::changeTrack);
         left_pane_layout->addWidget(line);
     }

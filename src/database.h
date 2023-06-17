@@ -19,7 +19,8 @@ public:
     }
 
     bool addStation(const QString& title, const QUrl& url, const QStringList& tags, const QPixmap& image);
-    QSqlQuery selectStationTitleUrlImage();
+    QSqlQuery selectStationIdTitleUrlImage();
+    QSqlQuery selectStationCategories(int station_id);
     bool clearStations();
 
 private:
