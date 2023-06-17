@@ -4,6 +4,7 @@
 #include "local_station_modal_popup.h"
 
 #include <QLabel>
+#include <QtDebug>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -144,25 +145,49 @@ void kadio::importStations()
     auto json_document = QJsonDocument::fromJson(export_file.readAll());
     export_file.close();
 
-    // Clear current list.
+    // Clear current station list.
     auto labels = left_pane->findChildren<StationListItem*>();
-    for (auto label_pointer : labels) {
+    for (StationListItem* label_pointer : labels) {
         delete label_pointer;
     }
     KadioDatabase::instance().clearStations();
 
+    // Read station data from exported file and create new entries.
+    // Store them in the database.
     auto items = json_document["entries"].toArray();
     for (auto entry_value : items) {
         QJsonObject entry = entry_value.toObject();
+
         QString title = entry["title"].toString();
         QUrl url = entry["url"].toString();
 
-        auto list_item = new StationListItem(title, url, {}, {});
+        QStringList tags;
+        tags.reserve(5);
+        auto tags_array = entry["tags"].toArray();
+        for (auto tag : tags_array) {
+            tags.append(tag.toString());
+        }
+
+        // Load image from base64-encoded string in the export file.
+        QByteArray base64_image_bytes;
+        QTextStream{&base64_image_bytes} << entry["image"].toString();
+        QPixmap image;
+        auto conversion_result = QByteArray::fromBase64Encoding(base64_image_bytes);
+        if (conversion_result) {
+            image.loadFromData(*conversion_result);
+        }
+        else {
+            qDebug() << "Failed to base64 decode image for station '" << title << "'. Loading default icon.";
+            image.load(":/default-radio-icon");
+        }
+
+        auto list_item = new StationListItem(title, url, tags, image);
         left_pane->layout()->addWidget(list_item);
         connect(list_item, &StationListItem::labelClicked, this, &kadio::changeTrack);
-        KadioDatabase::instance().addStation(title, url, {}, {});
+
+        KadioDatabase::instance().addStation(title, url, tags, image);
     }
-    this->statusBar()->showMessage(QStringLiteral("Successfully imported %1 stations").arg(items.size()), 3000);
+    this->statusBar()->showMessage(i18n("Successfully imported %1 stations").arg(items.size()), 3000);
 }
 
 
