@@ -198,6 +198,3 @@ void kadio::exportStations()
     out_file.commit();
     this->statusBar()->showMessage("Successfully exported station list", 3000);
 }
-
-
-kadio::~kadio() = default;

@@ -25,5 +25,5 @@ public slots:
 
 public:
     explicit kadio(QWidget *parent = nullptr);
-    ~kadio() override;
+    ~kadio() override = default;
 };
