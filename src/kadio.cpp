@@ -203,7 +203,15 @@ void kadio::exportStations()
     for (auto label : labels) {
         QJsonObject station_entry;
         station_entry.insert("title", label->title());
-        station_entry.insert("url", label->title());
+        station_entry.insert("url", label->url().toString());
+        station_entry.insert("tags", QJsonArray::fromStringList(label->tags()));
+
+        QByteArray image_bytes;
+        QBuffer buffer{&image_bytes};
+        buffer.open(QIODevice::WriteOnly);
+        label->image().save(&buffer, "PNG");
+        station_entry.insert("image", QString{image_bytes.toBase64()});
+
         item_array.append(station_entry);
     }
     top_level.insert("entries", item_array);
@@ -221,5 +229,5 @@ void kadio::exportStations()
     out_file.open(QIODevice::WriteOnly);
     out_file.write(json_document.toJson());
     out_file.commit();
-    this->statusBar()->showMessage("Successfully exported station list", 3000);
+    this->statusBar()->showMessage(i18n("Successfully exported station list"), 3000);
 }
